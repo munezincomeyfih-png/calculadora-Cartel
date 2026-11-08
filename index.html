@@ -1,164 +1,618 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Calculadora de Valores — Black Dragons</title>
-<style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#0b1824;--card:#12263a;--line:#27506f;--tx:#e6f3ff;--mut:#8fb2cc;--ac:#5cc8ff;--ok:#6ee7b7}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eaf3fa;--card:#fff;--line:#b7d3e6;--tx:#0e2233;--mut:#4d6d85;--ac:#0a7bb8;--ok:#047857}}
-:root[data-theme="light"]{--bg:#eaf3fa;--card:#fff;--line:#b7d3e6;--tx:#0e2233;--mut:#4d6d85;--ac:#0a7bb8;--ok:#047857}
-:root[data-theme="dark"]{--bg:#0b1824;--card:#12263a;--line:#27506f;--tx:#e6f3ff;--mut:#8fb2cc;--ac:#5cc8ff;--ok:#6ee7b7}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:Georgia,'Times New Roman',serif;padding:16px}
-main{max-width:720px;margin:0 auto}
-h1{text-align:center;letter-spacing:.12em;font-size:1.4rem;margin:8px 0 2px}
-.sub{text-align:center;color:var(--mut);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:18px}
-section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
-h2{margin:0 0 10px;font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ac)}
-label{font-size:.8rem;color:var(--mut);display:block;margin-bottom:4px}
-input,select,button{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
-input,select{width:100%}
-button{cursor:pointer;background:var(--ac);color:#04121c;border:0;font-weight:bold}
-button.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
-.row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
-.row>div{flex:1;min-width:130px}
-.seg{display:flex}
-.seg button{flex:1;border-radius:0;background:var(--bg);color:var(--mut);border:1px solid var(--line)}
-.seg button:first-child{border-radius:6px 0 0 6px}.seg button:last-child{border-radius:0 6px 6px 0}
-.seg button.on{background:var(--ac);color:#04121c}
-.tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:420px}
-th{font-size:.72rem;color:var(--mut);text-transform:uppercase;letter-spacing:.1em;text-align:left;padding:4px}
-td{padding:6px 4px;border-top:1px solid var(--line)}
-td.n,th.n{text-align:right;white-space:nowrap}
-.q{width:72px}
-.tot{display:grid;gap:8px}
-.tot div{display:flex;justify-content:space-between;padding:10px 12px;border:1px solid var(--line);border-radius:8px}
-.tot .big{font-size:1.2rem;color:var(--ok)}
-.fac{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:.9rem}
-.fac button{padding:3px 8px;font-size:.75rem}
-textarea{width:100%;min-height:150px;font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:var(--tx);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px}
-.note{color:var(--mut);font-size:.8rem;margin:8px 0 0}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Calculadora de Valores — Cartel</title>
+
+  <style>
+    /* ---------- Cores (tema escuro padrão) ---------- */
+    :root {
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+
+      --bg: #0d0716;
+      --card: #1a0f2b;
+      --line: #4b2a7a;
+      --tx: #f1ebfa;
+      --mut: #a995c9;
+      --ac: #b46cff;
+      --on: #12061f;
+      --ok: #e5e0f0;
+    }
+
+    /* ---------- Tema claro automático ---------- */
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg: #f3eefa;
+        --card: #fff;
+        --line: #cdb9ea;
+        --tx: #1d1030;
+        --mut: #65508a;
+        --ac: #7a2fd0;
+        --on: #fff;
+        --ok: #5b21b6;
+      }
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f3eefa;
+      --card: #fff;
+      --line: #cdb9ea;
+      --tx: #1d1030;
+      --mut: #65508a;
+      --ac: #7a2fd0;
+      --on: #fff;
+      --ok: #5b21b6;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0d0716;
+      --card: #1a0f2b;
+      --line: #4b2a7a;
+      --tx: #f1ebfa;
+      --mut: #a995c9;
+      --ac: #b46cff;
+      --on: #12061f;
+      --ok: #e5e0f0;
+    }
+
+    /* ---------- Base ---------- */
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--tx);
+      font-family: Georgia, 'Times New Roman', serif;
+      padding: 16px;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      letter-spacing: .18em;
+      font-size: 1.6rem;
+      margin: 8px 0 2px;
+    }
+
+    .sub {
+      text-align: center;
+      color: var(--mut);
+      font-size: .8rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: .85rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--ac);
+    }
+
+    label {
+      font-size: .8rem;
+      color: var(--mut);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ---------- Campos e botões ---------- */
+    input,
+    select,
+    button {
+      font: inherit;
+      color: var(--tx);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+
+    input,
+    select {
+      width: 100%;
+    }
+
+    button {
+      cursor: pointer;
+      background: var(--ac);
+      color: var(--on);
+      border: 0;
+      font-weight: bold;
+    }
+
+    button.ghost {
+      background: transparent;
+      color: var(--tx);
+      border: 1px solid var(--line);
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .row > div {
+      flex: 1;
+      min-width: 130px;
+    }
+
+    /* ---------- Botão SIM / NÃO ---------- */
+    .seg {
+      display: flex;
+    }
+
+    .seg button {
+      flex: 1;
+      border-radius: 0;
+      background: var(--bg);
+      color: var(--mut);
+      border: 1px solid var(--line);
+    }
+
+    .seg button:first-child {
+      border-radius: 6px 0 0 6px;
+    }
+
+    .seg button:last-child {
+      border-radius: 0 6px 6px 0;
+    }
+
+    .seg button.on {
+      background: var(--ac);
+      color: var(--on);
+    }
+
+    /* ---------- Tabela de itens ---------- */
+    .tw {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 420px;
+    }
+
+    th {
+      font-size: .72rem;
+      color: var(--mut);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      text-align: left;
+      padding: 4px;
+    }
+
+    td {
+      padding: 6px 4px;
+      border-top: 1px solid var(--line);
+    }
+
+    td.n,
+    th.n {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .q {
+      width: 72px;
+    }
+
+    /* ---------- Totais ---------- */
+    .tot {
+      display: grid;
+      gap: 8px;
+    }
+
+    .tot div {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .tot .big {
+      font-size: 1.2rem;
+      color: var(--ok);
+    }
+
+    /* ---------- Lista de facções ---------- */
+    .fac {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-top: 1px solid var(--line);
+      font-size: .9rem;
+    }
+
+    .fac button {
+      padding: 3px 8px;
+      font-size: .75rem;
+    }
+
+    /* ---------- Comprovante ---------- */
+    textarea {
+      width: 100%;
+      min-height: 170px;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .8rem;
+      color: var(--tx);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px;
+    }
+
+    .note {
+      color: var(--mut);
+      font-size: .8rem;
+      margin: 8px 0 0;
+    }
+
+    .foot {
+      text-align: center;
+      color: var(--mut);
+      font-size: .75rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin: 18px 0 6px;
+    }
+  </style>
 </head>
+
 <body>
-<main>
-<h1>TABELA DE VALORES — BLACK DRAGONS</h1>
-<div class="sub">Calculadora de vendas · Encomendas</div>
+  <main>
+    <h1>CARTEL</h1>
+    <div class="sub">Tabela de valores · Calculadora de vendas</div>
 
-<section>
-<h2>Cadastro de parcerias</h2>
-<div class="row">
-<div style="flex:2"><label>Nome da facção</label><input id="fn" placeholder="Ex.: Os Lobos"></div>
-<div><label>Parceria</label><div class="seg" id="fp"><button class="on" data-v="1">SIM</button><button data-v="0">NÃO</button></div></div>
-<button id="fadd">+ Cadastrar</button>
-</div>
-<div id="flist"></div>
-</section>
+    <!-- ========== CADASTRO DE PARCERIAS ========== -->
+    <section>
+      <h2>Cadastro de parcerias</h2>
 
-<section>
-<h2>Venda</h2>
-<div class="row">
-<div style="flex:2"><label>Facção (comprovante atual)</label><select id="fs"><option value="">— Selecionar facção —</option></select></div>
-<div><label>Parceria</label><div class="seg" id="cp"><button class="on" data-v="1">SIM</button><button data-v="0">NÃO</button></div></div>
-</div>
-<div class="tw" style="margin-top:12px">
-<table>
-<thead><tr><th>Item</th><th>Qtd</th><th class="n">Preço unit.</th><th class="n">Subtotal</th></tr></thead>
-<tbody id="items"></tbody>
-</table>
-</div>
-</section>
+      <p class="note" style="margin: 0 0 12px;">
+        Veja no diretório quais são as facções em parceria:
+        <a href="https://discord.com/channels/1567309631695364219/1567309633356566639"
+           target="_blank"
+           rel="noopener"
+           style="color: var(--ac); font-weight: bold;">
+          Abrir diretório de parcerias no Discord
+        </a>
+      </p>
 
-<section>
-<h2>Totais</h2>
-<div class="tot">
-<div><span>Total da venda</span><b id="tv">R$ 0</b></div>
-<div><span>Comissão do membro (20%)</span><b class="big" id="tm">R$ 0</b></div>
-<div><span>Painel da facção (80%)</span><b id="tp">R$ 0</b></div>
-</div>
-<p class="note">A comissão do membro é 20% do valor total vendido; o restante (80%) vai para o painel.</p>
-</section>
+      <div class="row">
+        <div style="flex: 2;">
+          <label>Nome da facção</label>
+          <input id="fn" placeholder="Ex.: Os Lobos">
+        </div>
 
-<section>
-<h2>Comprovante</h2>
-<textarea id="rc" readonly></textarea>
-<div class="row" style="margin-top:8px"><button id="copy">Copiar comprovante</button><button class="ghost" id="clr">Limpar venda</button></div>
-</section>
-</main>
+        <div>
+          <label>Parceria</label>
+          <div class="seg" id="fp">
+            <button class="on" data-v="1">SIM</button>
+            <button data-v="0">NÃO</button>
+          </div>
+        </div>
 
-<script>
-const ITEMS=[
- {n:"FIVE",c:116910,s:129900},
- {n:"TEC 9",c:180765,s:200850},
- {n:"MTAR 21",c:218160,s:242400},
- {n:"AKS",c:194400,s:216000},
- {n:"Maconha",c:600,s:700}
-];
-const COM=0.20;
-let par=1, facs=[];
-const $=id=>document.getElementById(id);
-const brl=v=>"R$ "+(Math.round(v*100)/100).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:2});
+        <button id="fadd">+ Cadastrar</button>
+      </div>
 
-try{facs=JSON.parse(localStorage.getItem("bd_facs")||"[]")}catch(e){facs=[]}
-function save(){try{localStorage.setItem("bd_facs",JSON.stringify(facs))}catch(e){}}
+      <div id="flist"></div>
+    </section>
 
-function seg(el,cb){el.querySelectorAll("button").forEach(b=>b.onclick=()=>{
- el.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));cb(+b.dataset.v)});}
-function setSeg(el,v){el.querySelectorAll("button").forEach(x=>x.classList.toggle("on",+x.dataset.v===v))}
+    <!-- ========== VENDA ========== -->
+    <section>
+      <h2>Venda</h2>
 
-let fpar=1;
-seg($("fp"),v=>fpar=v);
-seg($("cp"),v=>{par=v;calc()});
+      <div class="row">
+        <div style="flex: 2;">
+          <label>Facção (comprovante atual)</label>
+          <select id="fs">
+            <option value="">— Selecionar facção —</option>
+          </select>
+        </div>
 
-function renderFacs(){
- $("flist").innerHTML=facs.map((f,i)=>`<div class="fac"><span>${esc(f.n)} — Parceria: <b>${f.p?"SIM":"NÃO"}</b></span><button class="ghost" data-i="${i}">Remover</button></div>`).join("");
- $("flist").querySelectorAll("button").forEach(b=>b.onclick=()=>{facs.splice(+b.dataset.i,1);save();renderFacs()});
- const cur=$("fs").value;
- $("fs").innerHTML='<option value="">— Selecionar facção —</option>'+facs.map((f,i)=>`<option value="${i}">${esc(f.n)}</option>`).join("");
- $("fs").value=facs[cur]?cur:"";
-}
-function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+        <div>
+          <label>Parceria</label>
+          <div class="seg" id="cp">
+            <button class="on" data-v="1">SIM</button>
+            <button data-v="0">NÃO</button>
+          </div>
+        </div>
+      </div>
 
-$("fadd").onclick=()=>{
- const n=$("fn").value.trim();if(!n)return;
- const ex=facs.find(f=>f.n.toLowerCase()===n.toLowerCase());
- if(ex)ex.p=fpar;else facs.push({n,p:fpar});
- $("fn").value="";save();renderFacs();calc();
-};
-$("fs").onchange=()=>{
- const f=facs[+$("fs").value];
- if(f){par=f.p;setSeg($("cp"),par)}
- calc();
-};
+      <div class="tw" style="margin-top: 12px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qtd</th>
+              <th class="n">Preço unit.</th>
+              <th class="n">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="items"></tbody>
+        </table>
+      </div>
 
-$("items").innerHTML=ITEMS.map((it,i)=>`<tr><td>${it.n}</td><td><input class="q" type="number" min="0" step="1" value="0" data-i="${i}"></td><td class="n" id="u${i}"></td><td class="n" id="s${i}"></td></tr>`).join("");
-document.querySelectorAll(".q").forEach(e=>e.oninput=calc);
+      <p class="note">
+        Parceria SIM usa o valor mínimo da tabela; parceria NÃO usa o valor máximo.
+      </p>
+    </section>
 
-function calc(){
- let tot=0,lines=[];
- ITEMS.forEach((it,i)=>{
-  const q=Math.max(0,Math.floor(+document.querySelector(`.q[data-i="${i}"]`).value||0));
-  const u=par?it.c:it.s, s=q*u;
-  $("u"+i).textContent=brl(u);$("s"+i).textContent=brl(s);
-  tot+=s;if(q>0)lines.push(`${q}x ${it.n} — ${brl(u)} = ${brl(s)}`);
- });
- const m=tot*COM,p=tot-m;
- $("tv").textContent=brl(tot);$("tm").textContent=brl(m);$("tp").textContent=brl(p);
- const f=facs[+$("fs").value];
- $("rc").value=["BLACK DRAGONS — COMPROVANTE DE VENDA","Facção: "+(f?f.n:"—"),"Parceria: "+(par?"SIM":"NÃO"),"",...(lines.length?lines:["(sem itens)"]),"","Total da venda: "+brl(tot),"Comissão do membro (20%): "+brl(m),"Painel (80%): "+brl(p)].join("\n");
-}
-$("copy").onclick=async()=>{
- const b=$("copy");
- try{await navigator.clipboard.writeText($("rc").value)}catch(e){$("rc").select();document.execCommand("copy")}
- b.textContent="Copiado!";setTimeout(()=>b.textContent="Copiar comprovante",1500);
-};
-$("clr").onclick=()=>{document.querySelectorAll(".q").forEach(e=>e.value=0);calc()};
+    <!-- ========== TOTAIS ========== -->
+    <section>
+      <h2>Totais</h2>
 
-renderFacs();calc();
-</script>
+      <div class="tot">
+        <div>
+          <span>Total da venda</span>
+          <b id="tv">R$ 0</b>
+        </div>
+        <div>
+          <span id="lm">Comissão do membro (20%)</span>
+          <b class="big" id="tm">R$ 0</b>
+        </div>
+        <div>
+          <span id="lp">Painel da facção (80%)</span>
+          <b id="tp">R$ 0</b>
+        </div>
+      </div>
+
+      <p class="note">
+        Com parceria a comissão do membro é 20% do valor total; sem parceria é 30%.
+        O restante vai para o painel.
+      </p>
+    </section>
+
+    <!-- ========== COMPROVANTE ========== -->
+    <section>
+      <h2>Comprovante</h2>
+
+      <textarea id="rc" readonly></textarea>
+
+      <div class="row" style="margin-top: 8px;">
+        <button id="copy">Copiar comprovante</button>
+        <button class="ghost" id="clr">Limpar venda</button>
+      </div>
+    </section>
+
+    <div class="foot">Cartel · Dominando o mercado</div>
+  </main>
+
+  <script>
+    /* ---------- Itens: c = valor com parceria (mínimo), s = sem parceria (máximo) ---------- */
+    const ITEMS = [
+      { n: "Five-Seven", c: 116910, s: 129900 },
+      { n: "Mtar-21",    c: 218160, s: 242400 },
+      { n: "M4A1",       c: 194400, s: 216000 },
+      { n: "MPX",        c: 288900, s: 321000 },
+      { n: "Maconha",    c: 600,    s: 700 },
+      { n: "Pendrive",   c: 16200,  s: 18000 }
+    ];
+
+    let par = 1;     // parceria da venda atual (1 = SIM, 0 = NÃO)
+    let facs = [];   // facções cadastradas
+    let fpar = 1;    // parceria do cadastro novo
+
+    const $ = id => document.getElementById(id);
+
+    const brl = v => "R$ " + (Math.round(v * 100) / 100).toLocaleString("pt-BR", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    });
+
+    /* ---------- Salvar e carregar facções ---------- */
+    try {
+      facs = JSON.parse(localStorage.getItem("ct_facs") || "[]");
+    } catch (e) {
+      facs = [];
+    }
+
+    function save() {
+      try {
+        localStorage.setItem("ct_facs", JSON.stringify(facs));
+      } catch (e) {}
+    }
+
+    /* ---------- Botões SIM / NÃO ---------- */
+    function seg(el, cb) {
+      el.querySelectorAll("button").forEach(b => {
+        b.onclick = () => {
+          el.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+          cb(+b.dataset.v);
+        };
+      });
+    }
+
+    function setSeg(el, v) {
+      el.querySelectorAll("button").forEach(x => {
+        x.classList.toggle("on", +x.dataset.v === v);
+      });
+    }
+
+    seg($("fp"), v => fpar = v);
+    seg($("cp"), v => {
+      par = v;
+      calc();
+    });
+
+    /* ---------- Lista de facções ---------- */
+    function esc(s) {
+      return s.replace(/[&<>"]/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;"
+      }[c]));
+    }
+
+    function renderFacs() {
+      $("flist").innerHTML = facs.map((f, i) => `
+        <div class="fac">
+          <span>${esc(f.n)} — Parceria: <b>${f.p ? "SIM" : "NÃO"}</b></span>
+          <button class="ghost" data-i="${i}">Remover</button>
+        </div>
+      `).join("");
+
+      $("flist").querySelectorAll("button").forEach(b => {
+        b.onclick = () => {
+          facs.splice(+b.dataset.i, 1);
+          save();
+          renderFacs();
+          calc();
+        };
+      });
+
+      const cur = $("fs").value;
+
+      $("fs").innerHTML =
+        '<option value="">— Selecionar facção —</option>' +
+        facs.map((f, i) => `<option value="${i}">${esc(f.n)}</option>`).join("");
+
+      $("fs").value = facs[cur] ? cur : "";
+    }
+
+    $("fadd").onclick = () => {
+      const n = $("fn").value.trim();
+      if (!n) return;
+
+      const ex = facs.find(f => f.n.toLowerCase() === n.toLowerCase());
+
+      if (ex) {
+        ex.p = fpar;
+      } else {
+        facs.push({ n, p: fpar });
+      }
+
+      $("fn").value = "";
+      save();
+      renderFacs();
+      calc();
+    };
+
+    $("fs").onchange = () => {
+      const f = facs[+$("fs").value];
+
+      if (f) {
+        par = f.p;
+        setSeg($("cp"), par);
+      }
+
+      calc();
+    };
+
+    /* ---------- Tabela de itens ---------- */
+    $("items").innerHTML = ITEMS.map((it, i) => `
+      <tr>
+        <td>${it.n}</td>
+        <td>
+          <input class="q" type="number" min="0" step="1" value="0" data-i="${i}">
+        </td>
+        <td class="n" id="u${i}"></td>
+        <td class="n" id="s${i}"></td>
+      </tr>
+    `).join("");
+
+    document.querySelectorAll(".q").forEach(e => e.oninput = calc);
+
+    /* ---------- Cálculo ---------- */
+    function calc() {
+      let tot = 0;
+      let lines = [];
+
+      ITEMS.forEach((it, i) => {
+        const q = Math.max(0, Math.floor(+document.querySelector(`.q[data-i="${i}"]`).value || 0));
+        const u = par ? it.c : it.s;
+        const s = q * u;
+
+        $("u" + i).textContent = brl(u);
+        $("s" + i).textContent = brl(s);
+
+        tot += s;
+
+        if (q > 0) {
+          lines.push(`${q}x ${it.n} — ${brl(u)} = ${brl(s)}`);
+        }
+      });
+
+      // Comissão: 20% com parceria, 30% sem parceria
+      const pc = par ? 0.20 : 0.30;
+      const pct = Math.round(pc * 100);
+      const m = tot * pc;   // comissão do membro
+      const p = tot - m;    // painel da facção
+
+      $("tv").textContent = brl(tot);
+      $("tm").textContent = brl(m);
+      $("tp").textContent = brl(p);
+
+      $("lm").textContent = "Comissão do membro (" + pct + "%)";
+      $("lp").textContent = "Painel da facção (" + (100 - pct) + "%)";
+
+      const f = facs[+$("fs").value];
+
+      $("rc").value = [
+        "CARTEL — COMPROVANTE DE VENDA",
+        "Facção: " + (f ? f.n : "—"),
+        "Parceria: " + (par ? "SIM" : "NÃO"),
+        "",
+        ...(lines.length ? lines : ["(sem itens)"]),
+        "",
+        "Total da venda: " + brl(tot),
+        "Comissão do membro (" + pct + "%): " + brl(m),
+        "Painel (" + (100 - pct) + "%): " + brl(p)
+      ].join("\n");
+    }
+
+    /* ---------- Copiar e limpar ---------- */
+    $("copy").onclick = async () => {
+      const b = $("copy");
+
+      try {
+        await navigator.clipboard.writeText($("rc").value);
+      } catch (e) {
+        $("rc").select();
+        document.execCommand("copy");
+      }
+
+      b.textContent = "Copiado!";
+      setTimeout(() => b.textContent = "Copiar comprovante", 1500);
+    };
+
+    $("clr").onclick = () => {
+      document.querySelectorAll(".q").forEach(e => e.value = 0);
+      calc();
+    };
+
+    /* ---------- Início ---------- */
+    renderFacs();
+    calc();
+  </script>
 </body>
 </html>
